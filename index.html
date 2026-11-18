@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GBoS GEOAI | River Gambia Salinity Intelligence</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -11,1471 +11,1513 @@
 
 <style>
 :root {
- --green:#145b43;
- --green2:#21865e;
- --dark:#14251e;
- --muted:#718078;
- --border:#dce7df;
- --bg:#f1f5f2;
- --white:#fff;
- --blue:#287bb5;
- --orange:#e69a36;
- --red:#d94e43;
+  --navy:#10243a;
+  --blue:#1769aa;
+  --cyan:#16a6c9;
+  --green:#16865b;
+  --orange:#e58b28;
+  --red:#d34d4d;
+  --bg:#f2f5f9;
+  --panel:#ffffff;
+  --line:#e2e8f0;
+  --muted:#64748b;
+  --text:#172b43;
 }
-*{box-sizing:border-box}
-body{
- margin:0;background:var(--bg);color:var(--dark);
- font-family:Inter,Arial,sans-serif
+* {box-sizing:border-box}
+body {
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
-header{
- height:68px;background:#103c2c;color:white;
- display:flex;align-items:center;justify-content:space-between;
- padding:0 19px
+header {
+  background:linear-gradient(115deg,#10243a,#145b83);
+  color:white;
+  padding:23px 28px;
+  border-bottom:4px solid #16a6c9;
 }
-.brand{display:flex;align-items:center;gap:11px}
-.logo{
- width:40px;height:40px;border-radius:10px;
- background:#23865e;display:grid;place-items:center;
- font-weight:800;font-size:20px
+.header-inner {
+  max-width:1800px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
 }
-.brand h1{font-size:14px;margin:0;font-weight:800}
-.brand small{display:block;font-size:9px;color:#c5ded0;margin-top:4px}
-.headright{text-align:right;font-size:9px;line-height:1.7;color:#d5e8dc}
-main{
- height:calc(100vh - 68px);
- display:grid;
- grid-template-columns:minmax(260px,1fr) minmax(360px,1.35fr) minmax(290px,1fr);
- gap:10px;padding:10px
+.brand small {
+  display:block;
+  color:#b9d9e9;
+  font-weight:700;
+  letter-spacing:1.4px;
+  font-size:10px;
+  margin-bottom:8px;
 }
-.panel{
- background:white;border:1px solid var(--border);
- border-radius:11px;padding:13px;overflow:auto;min-width:0
+.brand h1 {
+  margin:0;
+  font-size:clamp(21px,3vw,30px);
+  font-weight:800;
 }
-.map-panel{padding:0;display:flex;flex-direction:column;overflow:hidden}
-.section{
- font-size:10px;font-weight:800;color:var(--green);
- letter-spacing:.55px;text-transform:uppercase;
- margin:16px 0 9px
+.brand p {
+  margin:7px 0 0;
+  color:#d4e8f4;
+  font-size:12px;
 }
-.section:first-child{margin-top:2px}
-label{display:block;font-size:10px;font-weight:650;margin:9px 0 5px}
-input,select{
- width:100%;padding:9px;border:1px solid var(--border);
- border-radius:7px;background:white;font:10px Inter;color:var(--dark)
+.header-tag {
+  border:1px solid #5b91ae;
+  padding:10px 14px;
+  border-radius:8px;
+  font-size:11px;
+  color:#e0f4ff;
+  white-space:nowrap;
 }
-button{
- border:0;border-radius:7px;padding:10px 11px;
- font:700 10px Inter;cursor:pointer
+main {
+  max-width:1800px;
+  margin:auto;
+  padding:17px;
 }
-button:disabled{opacity:.5;cursor:not-allowed}
-.primary{background:var(--green);color:white}
-.secondary{background:#eaf3ed;color:var(--green)}
-.dark{background:#263e32;color:white}
-.btnrow{display:flex;gap:7px;margin-top:8px}
-.btnrow button{flex:1}
-.small{font-size:9px;color:var(--muted);line-height:1.6}
-.box{
- padding:10px;border-radius:8px;background:#f6faf7;
- border:1px solid #e5eee8
+.status-strip {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:9px;
+  margin-bottom:15px;
 }
-.note{
- padding:10px;background:#fff8e8;border:1px solid #f0e4c5;
- color:#705a27;border-radius:8px;font-size:9px;line-height:1.6
+.status-item {
+  background:white;
+  border:1px solid var(--line);
+  border-radius:7px;
+  padding:8px 12px;
+  font-size:11px;
+  color:#475569;
 }
-.kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.kpi{
- padding:10px;border:1px solid #e5eee8;
- background:#f5f9f6;border-radius:8px;min-width:0
+.status-item strong {color:var(--text)}
+.dashboard {
+  display:grid;
+  grid-template-columns:minmax(260px,0.88fr) minmax(420px,1.55fr) minmax(280px,0.95fr);
+  gap:14px;
+  align-items:stretch;
 }
-.kpi small{font-size:9px;color:var(--muted)}
-.kpi strong{
- display:block;font-size:19px;color:var(--green);
- margin-top:5px;overflow-wrap:anywhere
+.panel {
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:11px;
+  box-shadow:0 2px 8px rgba(15,35,55,.045);
+  min-width:0;
+  overflow:hidden;
 }
-.kpi span{font-size:9px;color:var(--muted)}
-.maphead{
- padding:11px;border-bottom:1px solid var(--border);
- display:flex;justify-content:space-between;align-items:center;
- background:white;gap:8px
+.panel-heading {
+  padding:15px 16px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
 }
-.maphead strong{font-size:12px}
-.maphead small{font-size:9px;color:var(--muted)}
-#map{flex:1;min-height:300px}
-.chartbox{height:210px;position:relative;margin:8px 0 15px}
-.chartbox.tall{height:250px}
-table{width:100%;border-collapse:collapse;font-size:9px}
-th,td{padding:7px 5px;border-bottom:1px solid var(--border);text-align:left}
-th{color:var(--muted);font-weight:600}
-td:last-child,th:last-child{text-align:right}
-.status{font-size:9px;color:var(--green);line-height:1.6;margin-top:7px}
-.progress{height:7px;border-radius:8px;background:#e7eee9;overflow:hidden;margin-top:8px}
-#progress{height:100%;width:0;background:#239565;transition:width .2s}
-.legend{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.legend-item{font-size:9px;display:flex;gap:7px;align-items:center}
-.dot{height:10px;width:10px;border-radius:50%;display:inline-block;flex:none}
-footer{font-size:9px;color:var(--muted);line-height:1.8;margin-top:16px}
-a{color:var(--green)}
-@media(max-width:1050px){
- main{height:auto;grid-template-columns:1fr}
- .panel{max-height:none}
- .map-panel{height:550px}
- #map{min-height:450px}
+.panel-heading h2 {
+  font-size:13px;
+  margin:0;
+  font-weight:800;
+}
+.panel-heading span {
+  font-size:9px;
+  color:var(--muted);
+  font-weight:700;
+}
+.panel-body {
+  padding:15px;
+}
+.left-panel,.right-panel {
+  max-height:calc(100vh - 135px);
+  overflow-y:auto;
+}
+.map-panel {
+  display:flex;
+  flex-direction:column;
+  min-height:690px;
+}
+#map {
+  height:530px;
+  width:100%;
+  background:#dbe8ee;
+  z-index:1;
+}
+.map-toolbar {
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  padding:10px;
+  border-bottom:1px solid var(--line);
+  align-items:center;
+}
+.map-toolbar select {max-width:180px}
+.map-note {
+  font-size:10px;
+  color:var(--muted);
+  padding:10px 13px;
+  line-height:1.5;
+  border-top:1px solid var(--line);
+}
+.section-title {
+  font-size:11px;
+  font-weight:800;
+  color:#24445f;
+  margin:18px 0 9px;
+  padding-bottom:7px;
+  border-bottom:1px solid #e8edf3;
+}
+.section-title:first-child {margin-top:0}
+label {
+  display:block;
+  font-size:10px;
+  font-weight:700;
+  color:#475569;
+  margin:9px 0 5px;
+}
+input,select,textarea {
+  width:100%;
+  border:1px solid #d8e1eb;
+  border-radius:6px;
+  padding:9px 10px;
+  background:white;
+  color:#26384b;
+  font-family:inherit;
+  font-size:11px;
+  outline:none;
+}
+input:focus,select:focus {border-color:var(--cyan)}
+button {
+  border:0;
+  border-radius:6px;
+  padding:9px 12px;
+  font-family:inherit;
+  font-size:10px;
+  font-weight:800;
+  cursor:pointer;
+  transition:.15s;
+}
+button:hover {filter:brightness(.95)}
+.btn-primary {background:var(--blue);color:white}
+.btn-dark {background:var(--navy);color:white}
+.btn-light {background:#eaf1f7;color:#24445f;border:1px solid #d8e2eb}
+.btn-green {background:var(--green);color:white}
+.btn-orange {background:var(--orange);color:white}
+.btn-row {display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.btn-row button {flex:1}
+.hint {
+  color:#718096;
+  font-size:9px;
+  line-height:1.5;
+  margin-top:6px;
+}
+.notice {
+  background:#eef7fb;
+  border-left:3px solid var(--cyan);
+  padding:9px 10px;
+  border-radius:4px;
+  color:#31566d;
+  font-size:10px;
+  line-height:1.55;
+  margin:10px 0;
+}
+.warning {
+  background:#fff7e9;
+  border-left:3px solid var(--orange);
+  padding:9px 10px;
+  border-radius:4px;
+  color:#76501d;
+  font-size:10px;
+  line-height:1.55;
+  margin:10px 0;
+}
+.success {
+  background:#edf8f2;
+  border-left:3px solid var(--green);
+  padding:9px 10px;
+  border-radius:4px;
+  color:#256347;
+  font-size:10px;
+  line-height:1.5;
+  margin:10px 0;
+}
+.kpi-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+  margin-bottom:13px;
+}
+.kpi {
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:11px;
+  background:#fbfdff;
+}
+.kpi small {
+  display:block;
+  font-size:9px;
+  color:var(--muted);
+  font-weight:700;
+  margin-bottom:6px;
+}
+.kpi strong {
+  font-size:21px;
+  color:var(--navy);
+  font-weight:800;
+}
+.kpi em {
+  display:block;
+  font-size:9px;
+  color:#8290a0;
+  font-style:normal;
+  margin-top:4px;
+}
+.chart-box {
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:10px;
+  margin-bottom:12px;
+  min-height:205px;
+}
+.chart-title {
+  font-size:10px;
+  font-weight:800;
+  margin-bottom:9px;
+  color:#29445d;
+}
+canvas {max-width:100%}
+table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:10px;
+}
+th {
+  text-align:left;
+  color:#607286;
+  background:#f5f8fb;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.3px;
+  padding:9px 7px;
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+td {
+  padding:8px 7px;
+  border-bottom:1px solid #edf1f5;
+  color:#35485b;
+  vertical-align:middle;
+}
+.table-wrap {
+  overflow:auto;
+  max-height:340px;
+  border:1px solid var(--line);
+  border-radius:7px;
+}
+.pill {
+  display:inline-block;
+  border-radius:20px;
+  padding:4px 7px;
+  font-size:8px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.operational {background:#e5f6ed;color:#16714b}
+.closed {background:#fdecec;color:#b33c3c}
+.unknown {background:#edf1f5;color:#657487}
+.station-link {color:#1769aa;text-decoration:none;font-weight:700}
+.station-link:hover {text-decoration:underline}
+.small-text {font-size:9px;color:var(--muted);line-height:1.5}
+.legend {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  padding:10px 13px;
+  font-size:9px;
+  color:#526579;
+}
+.legend span {display:flex;align-items:center;gap:5px}
+.dot {
+  width:9px;height:9px;border-radius:50%;display:inline-block;
+}
+footer {
+  max-width:1800px;
+  margin:12px auto 0;
+  padding:15px 18px 25px;
+  color:#64748b;
+  font-size:9px;
+  line-height:1.7;
+  text-align:center;
+}
+hr {border:0;border-top:1px solid var(--line);margin:14px 0}
+@media(max-width:1100px) {
+  .dashboard {grid-template-columns:1fr 1.3fr}
+  .right-panel {grid-column:1 / -1;max-height:none}
+  .left-panel {max-height:none}
+}
+@media(max-width:700px) {
+  .dashboard {grid-template-columns:1fr}
+  .map-panel {grid-row:1;min-height:500px}
+  #map {height:430px}
+  .left-panel,.right-panel {max-height:none}
+  .header-inner {align-items:flex-start;flex-direction:column}
 }
 </style>
 </head>
 
 <body>
-
 <header>
- <div class="brand">
-  <div class="logo">G</div>
-  <div>
-   <h1>GBoS GEOAI</h1>
-   <small>RIVER GAMBIA SALINITY & SALT-FRONT INTELLIGENCE</small>
+  <div class="header-inner">
+    <div class="brand">
+      <small>GBoS GEOAI • HYDROLOGICAL INTELLIGENCE</small>
+      <h1>River Gambia Salinity Intelligence</h1>
+      <p>River Monitoring • Salinity Intrusion • Station Network • Freshwater Boundary</p>
+    </div>
+    <div class="header-tag">GIS / CARTOGRAPHY UNIT • GBoS</div>
   </div>
- </div>
- <div class="headright">
-  ● HYDROLOGICAL DATA INTELLIGENCE<br>
-  Atlantic intrusion • River discharge • Salinity • Early warning
- </div>
 </header>
 
 <main>
-
-<!-- LEFT PANEL -->
-<section class="panel">
-
- <div class="section">01. Data sources</div>
-
- <div class="box">
-  <b style="font-size:10px">Online data retrieval</b>
-  <p class="small">
-   Daily modelled river discharge from the Open-Meteo Flood API and
-   daily precipitation from the Open-Meteo Historical Weather API.
-  </p>
-  <div id="onlineStatus" class="status">Not yet connected.</div>
- </div>
-
- <label>Start date</label>
- <input type="date" id="startDate" value="2014-01-01">
-
- <label>End date</label>
- <input type="date" id="endDate" value="2020-12-31">
-
- <div class="btnrow">
-  <button class="primary" id="fetchOnline">FETCH ONLINE DATA</button>
-  <button class="secondary" id="clearData">CLEAR</button>
- </div>
-
- <div class="progress"><div id="progress"></div></div>
- <div class="small" id="progressText">Ready to retrieve online data.</div>
-
- <div class="section">02. Observed salinity data</div>
-
- <div class="note">
-  The DWR sensor readings are the authoritative source for observed salinity.
-  The online hydrological APIs do not provide these station observations.
- </div>
-
- <label>Upload DWR observation CSV</label>
- <input type="file" id="csvFile" accept=".csv,.txt">
-
- <label>Or enter a direct online CSV URL</label>
- <input type="url" id="csvUrl" placeholder="https://example.org/salinity.csv">
-
- <button class="secondary" id="loadCsvUrl" style="width:100%;margin-top:8px">
-  LOAD ONLINE SALINITY CSV
- </button>
-
- <div class="small" style="margin-top:7px">
-  Expected fields: date, station, salinity_psu. Optional fields:
-  water_level_m, water_temp_c, conductivity, tds, discharge_m3s.
-  CSV URLs must permit browser access (CORS).
- </div>
-
- <div class="section">03. Monitoring station</div>
-
- <label>Select station</label>
- <select id="stationSelect">
-  <option value="ALL">All monitoring stations</option>
- </select>
-
- <label>Salinity threshold (PSU)</label>
- <input type="number" id="threshold" value="0.5" min="0" step="0.1">
-
- <div class="btnrow">
-  <button class="primary" id="analyse">ANALYSE</button>
-  <button class="secondary" id="reset">RESET VIEW</button>
- </div>
-
- <div class="section">04. Map layers</div>
-
- <label><input type="checkbox" id="showStations" checked style="width:auto"> Monitoring stations</label>
- <label><input type="checkbox" id="showRiver" checked style="width:auto"> River reference line</label>
- <label><input type="checkbox" id="showSalt" checked style="width:auto"> Observed salt-front indicators</label>
-
- <label>Basemap</label>
- <select id="basemap">
-  <option value="satellite">Satellite</option>
-  <option value="street">Street</option>
-  <option value="terrain">Terrain</option>
- </select>
-
- <div class="section">05. Export</div>
- <button class="primary" id="exportSalinity" style="width:100%;margin-bottom:7px">
-  EXPORT SALINITY CSV
- </button>
- <button class="secondary" id="exportHydro" style="width:100%;margin-bottom:7px">
-  EXPORT ONLINE HYDROLOGY CSV
- </button>
- <button class="secondary" id="exportSummary" style="width:100%">
-  EXPORT STATION SUMMARY CSV
- </button>
-
- <div id="leftMessage" class="status"></div>
-
- <footer>
-  Produced by Ansu Singhateh<br>
-  GIS Analyst | GIS / Cartography Unit<br>
-  Gambia Bureau of Statistics<br>
-  GBoS GEOAI • Research and educational use
- </footer>
-
-</section>
-
-
-<!-- CENTRE MAP -->
-<section class="panel map-panel">
-
- <div class="maphead">
-  <div>
-   <strong>02. River Gambia monitoring network</strong><br>
-   <small>Atlantic coast to the eastern reaches</small>
+  <div class="status-strip">
+    <div class="status-item">DWR directory: <strong id="directoryStatus">Not loaded</strong></div>
+    <div class="status-item">Salinity observations: <strong id="observationStatus">No data loaded</strong></div>
+    <div class="status-item">Last refresh: <strong id="lastRefresh">—</strong></div>
   </div>
-  <button class="secondary" id="zoomMap">ZOOM TO RIVER</button>
- </div>
 
- <div id="map"></div>
+  <div class="dashboard">
 
-</section>
+    <!-- LEFT: CONTROLS -->
+    <section class="panel left-panel">
+      <div class="panel-heading">
+        <h2>01. Controls & Data</h2>
+        <span>DATA INPUT</span>
+      </div>
+      <div class="panel-body">
 
+        <div class="section-title">Salinity observation data</div>
+        <label>Upload DWR observation CSV</label>
+        <input type="file" id="csvFile" accept=".csv,text/csv">
+        <div class="hint">Expected fields: date, station, salinity_psu. Optional: water_level_m, water_temp_c, conductivity, tds, discharge_m3s.</div>
 
-<!-- RIGHT ANALYTICS -->
-<section class="panel">
+        <label>Or enter a direct online CSV URL</label>
+        <input id="csvUrl" type="url" placeholder="https://example.org/salinity-observations.csv">
+        <div class="btn-row">
+          <button class="btn-primary" id="loadCsvBtn">Load online salinity CSV</button>
+          <button class="btn-light" id="clearDataBtn">Clear data</button>
+        </div>
+        <div class="hint">The CSV host must allow browser cross-origin requests (CORS). A webpage URL is not a CSV download URL.</div>
+        <div id="csvMessage" class="notice">No salinity observations loaded. Load an observation CSV to populate the analysis.</div>
 
- <div class="section">03. Hydrological overview</div>
+        <div class="section-title">Observation filters</div>
+        <label>Monitoring station</label>
+        <select id="stationFilter">
+          <option value="ALL">All stations</option>
+        </select>
+        <label>Start date</label>
+        <input type="date" id="startDate">
+        <label>End date</label>
+        <input type="date" id="endDate">
+        <div class="btn-row">
+          <button class="btn-dark" id="applyFilterBtn">Apply filters</button>
+          <button class="btn-light" id="resetFilterBtn">Reset filters</button>
+        </div>
 
- <div class="small" id="analysisTitle">All monitoring stations • 2014–2020</div>
+        <div class="section-title">Salinity threshold</div>
+        <label>Freshwater threshold (PSU)</label>
+        <input type="number" id="threshold" value="0.5" min="0" step="0.1">
+        <div class="hint">The 0.5 PSU threshold is used as a configurable freshwater boundary indicator. Confirm the threshold appropriate to the study before formal reporting.</div>
 
- <div class="kpis" style="margin-top:9px">
-  <div class="kpi">
-   <small>Salinity records</small>
-   <strong id="recordCount">0</strong>
-   <span>Observed DWR records</span>
+        <div class="section-title">Map layers</div>
+        <label><input type="checkbox" id="showHydro" checked style="width:auto"> Show river monitoring reference locations</label>
+        <label><input type="checkbox" id="showSalinity" checked style="width:auto"> Show stations with loaded salinity data</label>
+        <label><input type="checkbox" id="showRiver" checked style="width:auto"> Show indicative River Gambia line</label>
+        <label><input type="checkbox" id="showDwr" style="width:auto"> Show DWR directory stations with verified coordinates</label>
+        <div class="hint">DWR directory entries without verified coordinates remain available in the station directory but are not assigned invented map locations.</div>
+
+        <div class="section-title">Downloads</div>
+        <div class="btn-row">
+          <button class="btn-green" id="downloadFiltered">Export filtered CSV</button>
+          <button class="btn-light" id="downloadStations">Export station directory</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn-light" id="downloadSummary">Export station summary</button>
+        </div>
+
+        <div class="section-title">Data interpretation</div>
+        <div class="warning">
+          DWR's public station directory is a station metadata source. It does not automatically provide salinity readings. Do not interpret operational status as proof that salinity data are available.
+        </div>
+      </div>
+    </section>
+
+    <!-- CENTRE: MAP -->
+    <section class="panel map-panel">
+      <div class="panel-heading">
+        <h2>02. River Gambia Monitoring Map</h2>
+        <span>SPATIAL VIEW</span>
+      </div>
+      <div class="map-toolbar">
+        <select id="basemap">
+          <option value="street">Street map</option>
+          <option value="satellite">Satellite</option>
+          <option value="terrain">Terrain</option>
+          <option value="dark">Dark basemap</option>
+        </select>
+        <button class="btn-light" id="zoomGambia">Zoom to Gambia</button>
+        <button class="btn-light" id="fitStations">Fit monitoring locations</button>
+      </div>
+      <div id="map"></div>
+      <div class="legend">
+        <span><i class="dot" style="background:#1769aa"></i> Hydrological reference location</span>
+        <span><i class="dot" style="background:#e58b28"></i> Salinity observation available</span>
+        <span><i class="dot" style="background:#16865b"></i> Freshwater reading at/below threshold</span>
+      </div>
+      <div class="map-note">
+        River line and reference coordinates are indicative map locators, not an official surveyed river centreline or confirmation of current DWR sensor positions. Salinity markers are displayed only where observation data match a mapped reference location.
+      </div>
+    </section>
+
+    <!-- RIGHT: ANALYTICS -->
+    <section class="panel right-panel">
+      <div class="panel-heading">
+        <h2>04. Analytics & Results</h2>
+        <span>LIVE FROM LOADED DATA</span>
+      </div>
+      <div class="panel-body">
+
+        <div class="kpi-grid">
+          <div class="kpi">
+            <small>Salinity records</small>
+            <strong id="kpiRecords">0</strong>
+            <em>Filtered observations</em>
+          </div>
+          <div class="kpi">
+            <small>Stations reporting</small>
+            <strong id="kpiStations">0</strong>
+            <em>With salinity records</em>
+          </div>
+          <div class="kpi">
+            <small>Mean salinity</small>
+            <strong id="kpiMean">—</strong>
+            <em>PSU</em>
+          </div>
+          <div class="kpi">
+            <small>Maximum salinity</small>
+            <strong id="kpiMax">—</strong>
+            <em>PSU</em>
+          </div>
+          <div class="kpi">
+            <small>Freshwater readings</small>
+            <strong id="kpiFresh">0</strong>
+            <em>At/below selected threshold</em>
+          </div>
+          <div class="kpi">
+            <small>Latest observation</small>
+            <strong id="kpiLatest">—</strong>
+            <em>Latest date in filtered data</em>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-title">Salinity observations through time</div>
+          <canvas id="timeChart" height="145"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-title">Mean salinity by monitoring station</div>
+          <canvas id="stationChart" height="150"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-title">Monthly mean salinity</div>
+          <canvas id="monthlyChart" height="145"></canvas>
+        </div>
+
+        <div class="section-title">Station salinity summary</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Station</th>
+                <th>Records</th>
+                <th>Mean PSU</th>
+                <th>Max PSU</th>
+              </tr>
+            </thead>
+            <tbody id="summaryTable">
+              <tr><td colspan="4">No observations loaded.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-title">Salt-front indicator</div>
+        <div id="saltFront" class="notice">
+          Load salinity observations to calculate a station-based freshwater boundary indicator.
+        </div>
+        <div class="small-text">
+          The indicator uses available station readings and their known indicative river-chainage values. It is not a continuous salt-front model or a measured river-kilometre boundary unless station chainages and sampling times are verified.
+        </div>
+      </div>
+    </section>
   </div>
-  <div class="kpi">
-   <small>Stations</small>
-   <strong id="stationCount">8</strong>
-   <span>Monitoring network</span>
-  </div>
-  <div class="kpi">
-   <small>Maximum salinity</small>
-   <strong id="maxSalinity">—</strong>
-   <span>PSU</span>
-  </div>
-  <div class="kpi">
-   <small>Salt-front distance</small>
-   <strong id="saltDistance">—</strong>
-   <span>km inland from Banjul</span>
-  </div>
- </div>
 
- <div class="section">04. Seasonal salinity pattern</div>
- <div class="chartbox">
-  <canvas id="seasonChart"></canvas>
- </div>
+  <!-- DWR DIRECTORY BELOW DASHBOARD -->
+  <section class="panel" style="margin-top:15px">
+    <div class="panel-heading">
+      <h2>03. DWR Monitoring Station Directory</h2>
+      <span>OFFICIAL ONLINE STATION METADATA</span>
+    </div>
+    <div class="panel-body">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between">
+        <div>
+          <strong style="font-size:12px">Department of Water Resources — The Gambia</strong>
+          <div class="small-text">Station directory retrieved from the official DWR website where browser access is permitted.</div>
+        </div>
+        <div class="btn-row" style="margin:0">
+          <button class="btn-primary" id="refreshDwr">Load / Refresh DWR stations online</button>
+          <button class="btn-light" id="showAllDwr">Show all stations</button>
+        </div>
+      </div>
 
- <div class="section">05. Salinity time series</div>
- <div class="chartbox tall">
-  <canvas id="salinityChart"></canvas>
- </div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-top:14px">
+        <div class="kpi"><small>Total DWR directory stations</small><strong id="dwrTotal">12</strong></div>
+        <div class="kpi"><small>Operational</small><strong id="dwrOperational">11</strong></div>
+        <div class="kpi"><small>Partly operational</small><strong id="dwrPartial">0</strong></div>
+        <div class="kpi"><small>Closed</small><strong id="dwrClosed">1</strong></div>
+      </div>
 
- <div class="section">06. Modelled river discharge</div>
- <div class="chartbox">
-  <canvas id="dischargeChart"></canvas>
- </div>
+      <div id="dwrMessage" class="notice">
+        The dashboard includes the supplied DWR directory as a fallback. Select “Load / Refresh DWR stations online” to retrieve the latest station listing and available station details.
+      </div>
 
- <div class="section">07. Rainfall context</div>
- <div class="chartbox">
-  <canvas id="rainChart"></canvas>
- </div>
+      <label>Search DWR station name or WIGOS ID</label>
+      <input type="search" id="dwrSearch" placeholder="Search station or WIGOS identifier...">
 
- <div class="section">08. Station summary</div>
- <table>
-  <thead>
-   <tr>
-    <th>Station</th>
-    <th>Mean PSU</th>
-    <th>Max PSU</th>
-    <th>Records</th>
-   </tr>
-  </thead>
-  <tbody id="stationTable">
-   <tr><td colspan="4">No observed salinity records loaded.</td></tr>
-  </tbody>
- </table>
+      <div class="table-wrap" style="max-height:440px;margin-top:10px">
+        <table>
+          <thead>
+            <tr>
+              <th>Station name</th>
+              <th>WIGOS ID</th>
+              <th>Station type</th>
+              <th>Elevation (m)</th>
+              <th>Declared status</th>
+              <th>Official detail</th>
+            </tr>
+          </thead>
+          <tbody id="dwrTable"></tbody>
+        </table>
+      </div>
 
- <div class="section">09. Salt-front interpretation</div>
- <div class="note" id="saltInterpretation">
-  Load observed salinity records to identify the most inland station
-  below the selected salinity threshold.
- </div>
+      <div class="warning">
+        The 12 entries above represent the DWR website's general station directory. They should not all be assumed to be river salinity monitoring stations. The eight hydrological reference locations used in the river map are listed separately below.
+      </div>
 
- <div class="section">10. Data and methodology</div>
- <div class="small">
-  <b>Salt-front definition:</b> the most inland monitored station where
-  observed salinity is at or below the selected threshold, provided
-  station distances are known and the observations are temporally comparable.
-  <br><br>
-  <b>Online hydrology:</b> modelled daily river discharge and rainfall.
-  These variables provide hydrological context but are not direct salinity
-  observations.
-  <br><br>
-  <b>Forecasting:</b> the online discharge outlook is not a trained salinity
-  forecast. A calibrated salinity model requires observed salinity training
-  data and independent validation.
- </div>
+      <div class="section-title">River hydrological monitoring reference locations</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Location</th>
+              <th>Indicative river distance</th>
+              <th>Coordinate status</th>
+              <th>Salinity data</th>
+            </tr>
+          </thead>
+          <tbody id="hydroTable"></tbody>
+        </table>
+      </div>
+      <div class="small-text" style="margin-top:8px">
+        The river reference locations are retained separately from the DWR general station directory. Their map positions are indicative town/location references; verify official hydrological sensor coordinates and chainages with DWR before using them for precise spatial interpolation.
+      </div>
+    </div>
+  </section>
 
- <footer>
-  Data attribution: Department of Water Resources, The Gambia;
-  Open-Meteo; Copernicus Emergency Management Service (GloFAS).
- </footer>
-
-</section>
+  <section class="panel" style="margin-top:15px">
+    <div class="panel-heading">
+      <h2>05. Data Sources & Methodology</h2>
+      <span>TRANSPARENCY</span>
+    </div>
+    <div class="panel-body">
+      <div class="section-title">Official and supporting sources</div>
+      <ul class="small-text" style="line-height:2">
+        <li><a class="station-link" href="https://meteogambia.gm/our-stations/" target="_blank" rel="noopener">DWR — Official station directory</a></li>
+        <li><a class="station-link" href="https://meteogambia.gm/services/hydrology/" target="_blank" rel="noopener">DWR — Hydrological services</a></li>
+        <li><a class="station-link" href="https://meteogambia.gm/data-request/" target="_blank" rel="noopener">DWR — Data request portal</a></li>
+        <li><a class="station-link" href="https://www.afrimet.org/Gambia/index.php/hydrology" target="_blank" rel="noopener">Afrimet — Gambia hydrology station information</a></li>
+        <li><a class="station-link" href="https://open-meteo.com/en/docs/flood-api" target="_blank" rel="noopener">Open-Meteo — Flood API documentation</a></li>
+        <li><a class="station-link" href="https://ewds.climate.copernicus.eu/datasets/cems-glofas-historical" target="_blank" rel="noopener">Copernicus — GloFAS historical discharge</a></li>
+      </ul>
+      <div class="notice">
+        DWR states that its hydrological services collect river and groundwater levels and physicochemical measurements including pH, salinity and temperature. This dashboard does not assume those observations are publicly downloadable through the station directory.
+      </div>
+      <div class="section-title">Methodology</div>
+      <ol class="small-text" style="line-height:1.8">
+        <li>Read the observation CSV and validate the required date, station and salinity_psu fields.</li>
+        <li>Apply the selected station and date filters before calculating statistics.</li>
+        <li>Calculate station-level and monthly salinity summaries from the loaded observations.</li>
+        <li>Compare readings against the selected freshwater threshold.</li>
+        <li>Estimate a station-based freshwater boundary only where station locations, river distances and observation dates support the comparison.</li>
+      </ol>
+      <div class="warning">
+        Modelled river discharge, rainfall and weather variables are not observed salinity. A salinity forecast requires suitable historical salinity observations for model training and independent validation.
+      </div>
+    </div>
+  </section>
 </main>
 
+<footer>
+  <strong>Produced by Ansu Singhateh | GIS Analyst | GIS / Cartography Unit | Gambia Bureau of Statistics</strong><br>
+  GBoS GEOAI • Research and educational use<br>
+  River Gambia Salinity Intelligence • Data sources and limitations should be checked before operational or policy use.
+</footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
 <script>
-"use strict";
+/* ============================================================
+   1. DWR GENERAL STATION DIRECTORY
+   The fallback list is metadata only. It is not salinity data.
+============================================================ */
 
-// ============================================================
-// 1. MONITORING NETWORK
-// ============================================================
+const DWR_BASE = "https://meteogambia.gm";
+const DWR_DIRECTORY_URL = DWR_BASE + "/our-stations/";
 
-// Station coordinates are map reference locations.
-// Published coordinates are used where available.
-// Pakaliba is an approximate map locator and should be replaced
-// with the official DWR station coordinate before precise analysis.
-
-const STATIONS = [
- {
-  name:"Banjul", code:"BJL",
-  lat:13.4549, lon:-16.5790,
-  distance:0, source:"Approximate city reference"
- },
- {
-  name:"Tendaba", code:"TDB",
-  lat:13.4417, lon:-15.8050,
-  distance:100, source:"Published sampling coordinate"
- },
- {
-  name:"Ballingho", code:"BLG",
-  lat:13.4724, lon:-15.6085,
-  distance:124, source:"Published sampling coordinate"
- },
- {
-  name:"Pakaliba", code:"PKL",
-  lat:13.62, lon:-15.15,
-  distance:null, source:"Approximate map locator"
- },
- {
-  name:"Kaur", code:"KR",
-  lat:13.6928, lon:-15.3249,
-  distance:198, source:"Published sampling coordinate"
- },
- {
-  name:"Kuntaur", code:"KTR",
-  lat:13.6700, lon:-14.8912,
-  distance:253, source:"Published sampling coordinate"
- },
- {
-  name:"Bansang", code:"BSG",
-  lat:13.5733, lon:-14.9229,
-  distance:null, source:"Published town coordinate"
- },
- {
-  name:"Basse", code:"BSE",
-  lat:13.3167, lon:-14.2167,
-  distance:null, source:"Approximate town reference"
- }
+const dwrStations = [
+  {id:1,name:"BANJUL",wigos:"0-20000-0-61711",status:"Operational",url:"/our-stations/1/"},
+  {id:2,name:"BANJUL PORT",wigos:"0-270-0-18D497E4",status:"Operational",url:"/our-stations/2/"},
+  {id:3,name:"BANJUL/YUNDUM",wigos:"0-20000-0-61701",status:"Operational",url:"/our-stations/3/"},
+  {id:4,name:"BASSE",wigos:"0-20000-0-61731",status:"Operational",url:"/our-stations/4/"},
+  {id:5,name:"FATOTO",wigos:"0-20000-0-61733",status:"Operational",url:"/our-stations/5/"},
+  {id:6,name:"JANJANGBUREH (GEORGETOWN)",wigos:"0-20000-0-61721",status:"Operational",url:"/our-stations/6/"},
+  {id:7,name:"JENOI",wigos:"0-20000-0-61707",status:"Operational",url:"/our-stations/7/"},
+  {id:8,name:"KAUR",wigos:"0-20000-0-61717",status:"Operational",url:"/our-stations/8/"},
+  {id:9,name:"KEREWAN",wigos:"0-20000-0-61712",status:"Operational",url:"/our-stations/9/"},
+  {id:10,name:"KUNTAUR",wigos:"0-20000-0-61720",status:"Closed",url:"/our-stations/10/"},
+  {id:11,name:"SAPU",wigos:"0-20000-0-61722",status:"Operational",url:"/our-stations/11/"},
+  {id:12,name:"SIBANOR",wigos:"0-20000-0-61705",status:"Operational",url:"/our-stations/12/"}
 ];
 
-const COLORS = {
- BJL:"#d94e43",
- TDB:"#e69a36",
- BLG:"#287bb5",
- PKL:"#7c64bb",
- KR:"#239565",
- KTR:"#176b45",
- BSG:"#b26c40",
- BSE:"#3c8292"
-};
+let dwrOnlineLoaded = false;
 
-const API = {
- flood:"https://flood-api.open-meteo.com/v1/flood",
- weather:"https://archive-api.open-meteo.com/v1/archive"
-};
+/* ============================================================
+   2. RIVER HYDROLOGICAL REFERENCE LOCATIONS
+   Approximate map locators, not verified sensor coordinates.
+============================================================ */
 
-let salinityData = [];
-let hydrologyData = [];
-let rainfallData = [];
-let stationMarkers = [];
-let saltMarkers = [];
-let charts = {};
-let riverLayer = null;
-let stationLayer = null;
-let saltLayer = null;
-let loading = false;
-
-
-// ============================================================
-// 2. HELPERS
-// ============================================================
-
-const $ = id => document.getElementById(id);
-
-function number(value,digits=2){
- if(!Number.isFinite(Number(value))) return "—";
- return Number(value).toLocaleString(undefined,{
-  maximumFractionDigits:digits
- });
-}
-
-function setProgress(value,text){
- $("progress").style.width = value+"%";
- $("progressText").textContent = text;
-}
-
-function setStatus(text){
- $("onlineStatus").textContent = text;
-}
-
-function setMessage(text){
- $("leftMessage").textContent = text;
-}
-
-function sleep(){
- return new Promise(resolve=>setTimeout(resolve,0));
-}
-
-function downloadCSV(rows,name){
- if(!rows || !rows.length){
-  alert("No data available to export.");
-  return;
- }
-
- const csv = Papa.unparse(rows);
- const blob = new Blob([csv],{type:"text/csv;charset=utf-8"});
- const url = URL.createObjectURL(blob);
- const a = document.createElement("a");
- a.href=url;
- a.download=name;
- a.click();
- URL.revokeObjectURL(url);
-}
-
-function dateRange(){
- const start=$("startDate").value;
- const end=$("endDate").value;
-
- if(!start || !end || start>end){
-  throw new Error("Please select a valid date range.");
- }
-
- return {start,end};
-}
-
-function stationByName(name){
- const normalized=String(name||"").trim().toLowerCase();
-
- return STATIONS.find(s=>
-  s.name.toLowerCase()===normalized ||
-  s.code.toLowerCase()===normalized
- );
-}
-
-function mean(values){
- const valid=values.filter(v=>Number.isFinite(Number(v))).map(Number);
- return valid.length
-  ? valid.reduce((a,b)=>a+b,0)/valid.length
-  : null;
-}
-
-function max(values){
- const valid=values.filter(v=>Number.isFinite(Number(v))).map(Number);
- return valid.length ? Math.max(...valid) : null;
-}
-
-function min(values){
- const valid=values.filter(v=>Number.isFinite(Number(v))).map(Number);
- return valid.length ? Math.min(...valid) : null;
-}
-
-function monthName(m){
- return new Date(2020,m-1,1).toLocaleString("en",{month:"short"});
-}
-
-
-// ============================================================
-// 3. MAP
-// ============================================================
-
-const map=L.map("map",{preferCanvas:true})
- .setView([13.55,-15.25],8);
-
-const base={
- satellite:L.tileLayer(
-  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  {attribution:"Tiles © Esri"}
- ),
- street:L.tileLayer(
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  {attribution:"© OpenStreetMap"}
- ),
- terrain:L.tileLayer(
-  "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-  {attribution:"© OpenTopoMap"}
- )
-};
-
-base.satellite.addTo(map);
-
-$("basemap").addEventListener("change",function(){
- Object.values(base).forEach(l=>map.removeLayer(l));
- base[this.value].addTo(map);
-});
-
-
-// Approximate river corridor reference.
-// This is a cartographic guide, not surveyed river geometry.
-
-const riverCoords=[
- [13.4549,-16.5790],
- [13.40,-16.40],
- [13.36,-16.20],
- [13.39,-16.00],
- [13.42,-15.82],
- [13.47,-15.61],
- [13.57,-15.45],
- [13.69,-15.325],
- [13.66,-15.15],
- [13.68,-14.89],
- [13.57,-14.92],
- [13.43,-14.70],
- [13.32,-14.40],
- [13.3167,-14.2167]
+const hydroStations = [
+  {name:"Banjul",lat:13.4549,lon:-16.5790,km:0,coord:"Approximate town reference"},
+  {name:"Tendaba",lat:13.4417,lon:-15.8050,km:100,coord:"Indicative location"},
+  {name:"Ballingho",lat:13.4724,lon:-15.6085,km:124,coord:"Indicative location"},
+  {name:"Pakaliba",lat:13.6200,lon:-15.1500,km:null,coord:"Approximate locator"},
+  {name:"Kaur",lat:13.6928,lon:-15.3249,km:198,coord:"Indicative location"},
+  {name:"Kuntaur",lat:13.6700,lon:-14.8912,km:253,coord:"Indicative location"},
+  {name:"Bansang",lat:13.5733,lon:-14.9229,km:null,coord:"Approximate town reference"},
+  {name:"Basse",lat:13.3167,lon:-14.2167,km:null,coord:"Approximate town reference"}
 ];
 
-riverLayer=L.polyline(riverCoords,{
- color:"#2b9bd0",weight:5,opacity:.85
+/* Indicative cartographic path only; not a surveyed river centreline. */
+const riverPath = [
+  [13.4549,-16.5790],
+  [13.4480,-16.3500],
+  [13.4550,-16.1000],
+  [13.4417,-15.8050],
+  [13.4724,-15.6085],
+  [13.5800,-15.4000],
+  [13.6928,-15.3249],
+  [13.6500,-15.1000],
+  [13.6700,-14.8912],
+  [13.5733,-14.9229],
+  [13.5000,-14.6500],
+  [13.3167,-14.2167]
+];
+
+/* ============================================================
+   3. MAP INITIALISATION
+============================================================ */
+
+const map = L.map("map", {zoomControl:true}).setView([13.55,-15.35],8);
+
+const baseLayers = {
+  street:L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+    maxZoom:19,attribution:"© OpenStreetMap contributors"
+  }),
+  satellite:L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{
+    maxZoom:19,attribution:"Tiles © Esri"
+  }),
+  terrain:L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",{
+    maxZoom:17,attribution:"© OpenTopoMap"
+  }),
+  dark:L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{
+    maxZoom:19,attribution:"© CARTO"
+  })
+};
+
+let activeBase = baseLayers.street.addTo(map);
+let riverLayer = L.polyline(riverPath,{
+  color:"#147bb5",weight:4,opacity:.8,dashArray:"7 5"
 }).addTo(map);
 
-function renderStations(){
- if(stationLayer) map.removeLayer(stationLayer);
+let hydroLayer = L.layerGroup().addTo(map);
+let salinityLayer = L.layerGroup().addTo(map);
+let dwrCoordinateLayer = L.layerGroup();
 
- stationLayer=L.layerGroup();
+function setBasemap(value) {
+  if(activeBase) map.removeLayer(activeBase);
+  activeBase = baseLayers[value] || baseLayers.street;
+  activeBase.addTo(map);
+  activeBase.bringToBack();
+}
+document.getElementById("basemap").addEventListener("change",e=>setBasemap(e.target.value));
 
- STATIONS.forEach(s=>{
-  const marker=L.circleMarker([s.lat,s.lon],{
-   radius:7,
-   color:"#ffffff",
-   weight:2,
-   fillColor:COLORS[s.code],
-   fillOpacity:1
+function drawHydroMarkers() {
+  hydroLayer.clearLayers();
+  if(!document.getElementById("showHydro").checked) return;
+
+  hydroStations.forEach(s=>{
+    const marker = L.circleMarker([s.lat,s.lon],{
+      radius:6,color:"#ffffff",weight:1.5,fillColor:"#1769aa",fillOpacity:.95
+    });
+    marker.bindPopup(
+      `<b>${s.name}</b><br>Hydrological reference location`+
+      `<br>Indicative river distance: ${s.km===null?"Not specified":s.km+" km"}`+
+      `<br><small>${s.coord}</small>`
+    );
+    marker.addTo(hydroLayer);
   });
-
-  marker.bindPopup(`
-   <b>${s.name}</b><br>
-   Station code: ${s.code}<br>
-   Distance from mouth: ${s.distance===null?"Not established":s.distance+" km"}<br>
-   Coordinate: ${s.lat}, ${s.lon}<br>
-   <small>${s.source}</small>
-  `);
-
-  marker.addTo(stationLayer);
- });
-
- if($("showStations").checked) stationLayer.addTo(map);
 }
 
-renderStations();
-
-$("showStations").addEventListener("change",function(){
- if(this.checked) stationLayer.addTo(map);
- else map.removeLayer(stationLayer);
-});
-
-$("showRiver").addEventListener("change",function(){
- if(this.checked) riverLayer.addTo(map);
- else map.removeLayer(riverLayer);
-});
-
-$("showSalt").addEventListener("change",function(){
- if(!saltLayer) return;
- if(this.checked) saltLayer.addTo(map);
- else map.removeLayer(saltLayer);
-});
-
-$("zoomMap").addEventListener("click",()=>{
- map.fitBounds(L.latLngBounds(riverCoords),{padding:[20,20]});
-});
-
-
-// ============================================================
-// 4. STATION SELECTOR
-// ============================================================
-
-STATIONS.forEach(s=>{
- const option=document.createElement("option");
- option.value=s.code;
- option.textContent=s.name;
- $("stationSelect").appendChild(option);
-});
-
-
-// ============================================================
-// 5. ONLINE FLOOD API
-// ============================================================
-
-async function fetchFlood(station,dates){
- const url=new URL(API.flood);
-
- url.searchParams.set("latitude",station.lat);
- url.searchParams.set("longitude",station.lon);
- url.searchParams.set("daily","river_discharge");
- url.searchParams.set("start_date",dates.start);
- url.searchParams.set("end_date",dates.end);
- url.searchParams.set("timezone","GMT");
-
- const response=await fetch(url);
-
- if(!response.ok){
-  throw new Error(
-   `Flood API error for ${station.name}: HTTP ${response.status}`
-  );
- }
-
- const json=await response.json();
-
- if(!json.daily || !json.daily.time){
-  throw new Error(`No discharge data returned for ${station.name}.`);
- }
-
- return json.daily.time.map((date,i)=>({
-  date,
-  station:station.name,
-  station_code:station.code,
-  latitude:station.lat,
-  longitude:station.lon,
-  discharge_m3s:json.daily.river_discharge?.[i] ?? null,
-  data_type:"Modelled daily river discharge",
-  source:"Open-Meteo Flood API"
- }));
-}
-
-
-// ============================================================
-// 6. ONLINE RAINFALL API
-// ============================================================
-
-async function fetchRain(station,dates){
- const url=new URL(API.weather);
-
- url.searchParams.set("latitude",station.lat);
- url.searchParams.set("longitude",station.lon);
- url.searchParams.set("start_date",dates.start);
- url.searchParams.set("end_date",dates.end);
- url.searchParams.set("daily","precipitation_sum");
- url.searchParams.set("timezone","GMT");
-
- const response=await fetch(url);
-
- if(!response.ok){
-  throw new Error(
-   `Weather API error for ${station.name}: HTTP ${response.status}`
-  );
- }
-
- const json=await response.json();
-
- if(!json.daily || !json.daily.time){
-  throw new Error(`No rainfall data returned for ${station.name}.`);
- }
-
- return json.daily.time.map((date,i)=>({
-  date,
-  station:station.name,
-  station_code:station.code,
-  precipitation_mm:json.daily.precipitation_sum?.[i] ?? null,
-  data_type:"Daily reanalysis precipitation",
-  source:"Open-Meteo Historical Weather API"
- }));
-}
-
-
-// ============================================================
-// 7. FETCH ONLINE DATA FOR EIGHT STATIONS
-// ============================================================
-
-async function fetchOnlineData(){
- if(loading) return;
-
- loading=true;
- $("fetchOnline").disabled=true;
-
- try{
-  const dates=dateRange();
-
-  hydrologyData=[];
-  rainfallData=[];
-
-  setStatus("Connecting to online data services...");
-  setProgress(2,"Preparing station requests...");
-
-  for(let i=0;i<STATIONS.length;i++){
-   const station=STATIONS[i];
-
-   setProgress(
-    (i/STATIONS.length)*90,
-    `Retrieving modelled discharge and rainfall: ${station.name}`
-   );
-
-   const [flood,rain]=await Promise.all([
-    fetchFlood(station,dates),
-    fetchRain(station,dates)
-   ]);
-
-   hydrologyData.push(...flood);
-   rainfallData.push(...rain);
-
-   setProgress(
-    ((i+1)/STATIONS.length)*90,
-    `Completed ${station.name} (${i+1}/${STATIONS.length})`
-   );
-
-   await sleep();
+function drawRiver() {
+  if(document.getElementById("showRiver").checked) {
+    if(!map.hasLayer(riverLayer)) riverLayer.addTo(map);
+  } else {
+    if(map.hasLayer(riverLayer)) map.removeLayer(riverLayer);
   }
-
-  setProgress(100,"Online hydrology and rainfall retrieval completed.");
-
-  setStatus(
-   `Retrieved ${hydrologyData.length.toLocaleString()} discharge records and ${rainfallData.length.toLocaleString()} rainfall records.`
-  );
-
-  $("stationCount").textContent=STATIONS.length;
-
-  drawHydrologyCharts();
-  setMessage(
-   "Online modelled hydrology and rainfall are ready. Load DWR salinity observations for salt-front analysis."
-  );
-
- }catch(error){
-  console.error(error);
-  setStatus("Online retrieval failed: "+error.message);
-  setMessage(error.message);
-  setProgress(0,"Retrieval failed.");
- }finally{
-  loading=false;
-  $("fetchOnline").disabled=false;
- }
 }
 
-$("fetchOnline").addEventListener("click",fetchOnlineData);
-
-
-// ============================================================
-// 8. DWR CSV NORMALISATION
-// ============================================================
-
-function normalizeSalinityRows(rows){
- const output=[];
-
- for(const row of rows){
-  const keys=Object.keys(row);
-
-  function get(candidates){
-   const key=keys.find(k=>
-    candidates.includes(k.toLowerCase().trim())
-   );
-   return key ? row[key] : null;
-  }
-
-  const date=get(["date","datetime","timestamp","time"]);
-  const stationName=get(["station","station_name","site","location"]);
-  const salinity=get(["salinity_psu","salinity","psu","salinity (psu)"]);
-
-  if(!date || !stationName || salinity===null) continue;
-
-  const station=stationByName(stationName);
-
-  const value=Number(salinity);
-  const parsedDate=new Date(date);
-
-  if(!Number.isFinite(value) || isNaN(parsedDate.getTime())) continue;
-
-  output.push({
-   date:parsedDate.toISOString(),
-   station:station ? station.name : String(stationName).trim(),
-   station_code:station ? station.code : String(stationName).trim(),
-   salinity_psu:value,
-   water_level_m:Number(get(["water_level_m","water_level"])) || null,
-   water_temp_c:Number(get(["water_temp_c","temperature"])) || null,
-   tds:Number(get(["tds","tds_mg_l"])) || null,
-   conductivity:Number(get(["conductivity","ec","conductivity_us_cm"])) || null,
-   discharge_m3s:Number(get(["discharge_m3s","discharge"])) || null,
-   data_type:"Observed salinity",
-   source:"DWR CSV"
-  });
- }
-
- return output.sort((a,b)=>new Date(a.date)-new Date(b.date));
-}
-
-function loadSalinityText(text){
- const parsed=Papa.parse(text,{
-  header:true,
-  skipEmptyLines:true,
-  dynamicTyping:false
- });
-
- if(parsed.errors.length){
-  console.warn("CSV parsing warnings:",parsed.errors);
- }
-
- const result=normalizeSalinityRows(parsed.data);
-
- if(!result.length){
-  throw new Error(
-   "No usable records found. Check that the CSV has date, station and salinity_psu columns."
-  );
- }
-
- salinityData=result;
-
- $("recordCount").textContent=result.length.toLocaleString();
-
- analyseSalinity();
-
- setMessage(
-  `Loaded ${result.length.toLocaleString()} observed salinity records.`
- );
-}
-
-$("csvFile").addEventListener("change",async function(){
- const file=this.files?.[0];
- if(!file) return;
-
- try{
-  loadSalinityText(await file.text());
- }catch(error){
-  alert(error.message);
- }
-});
-
-$("loadCsvUrl").addEventListener("click",async()=>{
- const url=$("csvUrl").value.trim();
-
- if(!url){
-  alert("Enter a direct CSV URL.");
-  return;
- }
-
- try{
-  $("loadCsvUrl").disabled=true;
-  setMessage("Downloading online salinity CSV...");
-
-  const response=await fetch(url);
-
-  if(!response.ok){
-   throw new Error("CSV URL returned HTTP "+response.status);
-  }
-
-  loadSalinityText(await response.text());
-
- }catch(error){
-  setMessage(
-   "Could not retrieve the CSV. Check the URL and whether the source allows CORS. "+error.message
-  );
- }finally{
-  $("loadCsvUrl").disabled=false;
- }
-});
-
-
-// ============================================================
-// 9. FILTER OBSERVATIONS
-// ============================================================
-
-function filteredSalinity(){
- const selected=$("stationSelect").value;
-
- if(selected==="ALL") return salinityData;
-
- return salinityData.filter(d=>
-  d.station_code===selected ||
-  d.station===selected
- );
-}
-
-$("stationSelect").addEventListener("change",analyseSalinity);
-$("analyse").addEventListener("click",analyseSalinity);
-
-
-// ============================================================
-// 10. SALINITY ANALYSIS
-// ============================================================
-
-function analyseSalinity(){
- const data=filteredSalinity();
-
- if(!data.length){
-  clearSalinityCharts();
-  updateSalinityKPIs([]);
-  return;
- }
-
- const threshold=Number($("threshold").value)||0.5;
-
- updateSalinityKPIs(data);
- drawSalinityCharts(data);
- updateStationTable(data);
- updateSaltFront(data,threshold);
-}
-
-function updateSalinityKPIs(data){
- $("recordCount").textContent=data.length.toLocaleString();
-
- const maximum=max(data.map(d=>d.salinity_psu));
-
- $("maxSalinity").textContent=
-  maximum===null?"—":number(maximum,2);
-}
-
-function updateStationTable(data){
- const rows=STATIONS.map(s=>{
-  const records=data.filter(d=>
-   d.station_code===s.code || d.station===s.name
-  );
-
-  return {
-   name:s.name,
-   average:mean(records.map(d=>d.salinity_psu)),
-   maximum:max(records.map(d=>d.salinity_psu)),
-   count:records.length
-  };
- });
-
- $("stationTable").innerHTML=rows.map(r=>`
-  <tr>
-   <td>${r.name}</td>
-   <td>${r.average===null?"—":number(r.average)}</td>
-   <td>${r.maximum===null?"—":number(r.maximum)}</td>
-   <td>${r.count.toLocaleString()}</td>
-  </tr>
- `).join("");
-}
-
-
-// ============================================================
-// 11. SALT-FRONT ESTIMATION
-// ============================================================
-
-// The front is estimated from station observations, not interpolated
-// continuously along the entire river.
-//
-// A station is considered fresh if salinity <= threshold.
-// The inland-most qualifying station is selected only when the
-// observations can be compared at a common date.
-
-function updateSaltFront(data,threshold){
- if(saltLayer) map.removeLayer(saltLayer);
-
- saltLayer=L.layerGroup();
-
- const groups=new Map();
-
- data.forEach(d=>{
-  const day=String(d.date).slice(0,10);
-
-  if(!groups.has(day)) groups.set(day,[]);
-  groups.get(day).push(d);
- });
-
- const dailyFront=[];
-
- for(const [day,records] of groups){
-  const stationValues=[];
-
-  for(const station of STATIONS){
-   if(station.distance===null) continue;
-
-   const stationRecords=records.filter(r=>
-    r.station_code===station.code ||
-    r.station===station.name
-   );
-
-   if(!stationRecords.length) continue;
-
-   stationValues.push({
-    station,
-    salinity:mean(stationRecords.map(r=>r.salinity_psu))
-   });
-  }
-
-  const fresh=stationValues.filter(x=>
-   x.salinity!==null && x.salinity<=threshold
-  );
-
-  if(!fresh.length) continue;
-
-  const inland=fresh.reduce((a,b)=>
-   a.station.distance>b.station.distance?a:b
-  );
-
-  dailyFront.push({
-   date:day,
-   distance_km:inland.station.distance,
-   station:inland.station.name
-  });
- }
-
- const latestDate=dailyFront.length
-  ? dailyFront[dailyFront.length-1].date
-  : null;
-
- if(latestDate){
-  const latestRecords=data.filter(d=>
-   String(d.date).slice(0,10)===latestDate
-  );
-
-  const latestStations=[];
-
-  STATIONS.forEach(station=>{
-   if(station.distance===null) return;
-
-   const stationRecords=latestRecords.filter(r=>
-    r.station_code===station.code ||
-    r.station===station.name
-   );
-
-   if(!stationRecords.length) return;
-
-   const sal=mean(stationRecords.map(r=>r.salinity_psu));
-
-   if(sal!==null && sal<=threshold){
-    latestStations.push({station,salinity:sal});
-   }
-  });
-
-  latestStations.forEach(x=>{
-   L.circleMarker(
-    [x.station.lat,x.station.lon],
-    {
-     radius:9,
-     color:"#ffffff",
-     weight:2,
-     fillColor:"#21a56b",
-     fillOpacity:1
+function drawSalinityMarkers() {
+  salinityLayer.clearLayers();
+  if(!document.getElementById("showSalinity").checked) return;
+
+  const latestByStation = {};
+  filteredData.forEach(r=>{
+    const key = normalizeStation(r.station);
+    if(!latestByStation[key] || r.date > latestByStation[key].date) {
+      latestByStation[key] = r;
     }
-   ).bindPopup(
-    `<b>Fresh-water threshold met</b><br>
-     ${x.station.name}<br>
-     Salinity: ${number(x.salinity)} PSU<br>
-     Date: ${latestDate}`
-   ).addTo(saltLayer);
   });
 
-  if($("showSalt").checked) saltLayer.addTo(map);
- }
+  Object.values(latestByStation).forEach(record=>{
+    const match = hydroStations.find(s=>normalizeStation(s.name)===normalizeStation(record.station));
+    if(!match) return;
 
- if(dailyFront.length){
-  const latest=dailyFront[dailyFront.length-1];
-
-  $("saltDistance").textContent=
-   number(latest.distance_km,0);
-
-  $("saltInterpretation").textContent=
-   `On ${latest.date}, the inland-most monitored station with salinity at or below ${threshold} PSU was ${latest.station}, approximately ${latest.distance_km} km from the river mouth. This is a station-based estimate, not a continuously mapped salt-front boundary.`;
- }else{
-  $("saltDistance").textContent="—";
-
-  $("saltInterpretation").textContent=
-   `No same-day observed station record met the ${threshold} PSU threshold at a station with a known river-distance reference. Check station names, dates and distance metadata.`;
- }
-
- drawSaltFrontChart(dailyFront);
+    const threshold = getThreshold();
+    const fresh = record.salinity_psu <= threshold;
+    const marker = L.circleMarker([match.lat,match.lon],{
+      radius:9,color:"#ffffff",weight:2,
+      fillColor:fresh?"#16865b":"#e58b28",
+      fillOpacity:.95
+    });
+    marker.bindPopup(
+      `<b>${match.name}</b><br>Latest salinity: ${record.salinity_psu} PSU`+
+      `<br>Date: ${record.date}`+
+      `<br>Threshold: ${threshold} PSU`
+    );
+    marker.addTo(salinityLayer);
+  });
 }
 
-
-// ============================================================
-// 12. MONTHLY SEASONAL SALINITY
-// ============================================================
-
-function drawSalinityCharts(data){
- const monthly=Array.from({length:12},()=>[]);
-
- data.forEach(d=>{
-  const month=new Date(d.date).getUTCMonth();
-  monthly[month].push(d.salinity_psu);
- });
-
- const monthlyMeans=monthly.map(mean);
-
- if(charts.season) charts.season.destroy();
-
- charts.season=new Chart($("seasonChart"),{
-  type:"bar",
-  data:{
-   labels:monthly.map((_,i)=>monthName(i+1)),
-   datasets:[{
-    label:"Mean salinity (PSU)",
-    data:monthlyMeans,
-    backgroundColor:"#287bb5"
-   }]
-  },
-  options:{
-   responsive:true,
-   maintainAspectRatio:false,
-   plugins:{legend:{display:false}},
-   scales:{
-    x:{ticks:{font:{size:9}}},
-    y:{title:{display:true,text:"PSU"}}
-   }
+function refreshMap() {
+  drawHydroMarkers();
+  drawRiver();
+  drawSalinityMarkers();
+  if(document.getElementById("showDwr").checked && dwrCoordinateLayer.getLayers().length) {
+    dwrCoordinateLayer.addTo(map);
+  } else {
+    map.removeLayer(dwrCoordinateLayer);
   }
- });
+}
 
- const sorted=[...data].sort((a,b)=>
-  new Date(a.date)-new Date(b.date)
- );
+["showHydro","showSalinity","showRiver","showDwr"].forEach(id=>{
+  document.getElementById(id).addEventListener("change",refreshMap);
+});
 
- const series=sorted.map(d=>({
-  x:d.date,
-  y:d.salinity_psu
- }));
+document.getElementById("zoomGambia").onclick=()=>{
+  map.setView([13.55,-15.35],8);
+};
+document.getElementById("fitStations").onclick=()=>{
+  const pts=hydroStations.map(s=>[s.lat,s.lon]);
+  map.fitBounds(pts,{padding:[25,25]});
+};
 
- if(charts.salinity) charts.salinity.destroy();
+/* ============================================================
+   4. CSV PARSER AND OBSERVATION DATA
+============================================================ */
 
- charts.salinity=new Chart($("salinityChart"),{
-  type:"line",
-  data:{
-   datasets:[{
-    label:"Observed salinity",
-    data:series,
-    parsing:false,
-    borderColor:"#287bb5",
-    backgroundColor:"#287bb5",
-    pointRadius:0,
-    borderWidth:1.5
-   }]
-  },
-  options:{
-   responsive:true,
-   maintainAspectRatio:false,
-   plugins:{
-    legend:{labels:{font:{size:9}}}
-   },
-   scales:{
-    x:{
-     type:"time",
-     time:{unit:"month"},
-     ticks:{font:{size:9}}
-    },
-    y:{
-     title:{display:true,text:"Salinity (PSU)"}
+let allData = [];
+let filteredData = [];
+let timeChart, stationChart, monthlyChart;
+
+function parseCSV(text) {
+  const rows=[];
+  let row=[],cell="",inside=false;
+
+  for(let i=0;i<text.length;i++){
+    const c=text[i],next=text[i+1];
+
+    if(c === '"' && inside && next === '"') {
+      cell+='"';i++;
+    } else if(c === '"') {
+      inside=!inside;
+    } else if(c === ',' && !inside) {
+      row.push(cell);cell="";
+    } else if((c === '\n' || c === '\r') && !inside) {
+      if(c === '\r' && next === '\n') i++;
+      row.push(cell);cell="";
+      if(row.some(v=>String(v).trim()!=="")) rows.push(row);
+      row=[];
+    } else {
+      cell+=c;
     }
-   }
   }
- });
+
+  row.push(cell);
+  if(row.some(v=>String(v).trim()!=="")) rows.push(row);
+  if(rows.length<2) return [];
+
+  const headers=rows[0].map(h=>String(h).trim().toLowerCase().replace(/^\uFEFF/,""));
+  return rows.slice(1).map(values=>{
+    const obj={};
+    headers.forEach((h,i)=>obj[h]=(values[i]??"").trim());
+    return obj;
+  });
 }
 
-
-// ============================================================
-// 13. DATE SCALE SUPPORT
-// ============================================================
-
-// Chart.js time scale needs a date adapter. To keep this page
-// dependency-light, use category labels for the time series instead.
-
-function drawSalinityCharts(data){
- const monthly=Array.from({length:12},()=>[]);
-
- data.forEach(d=>{
-  const month=new Date(d.date).getUTCMonth();
-  monthly[month].push(Number(d.salinity_psu));
- });
-
- if(charts.season) charts.season.destroy();
-
- charts.season=new Chart($("seasonChart"),{
-  type:"bar",
-  data:{
-   labels:monthly.map((_,i)=>monthName(i+1)),
-   datasets:[{
-    label:"Mean salinity (PSU)",
-    data:monthly.map(mean),
-    backgroundColor:"#287bb5"
-   }]
-  },
-  options:{
-   responsive:true,
-   maintainAspectRatio:false,
-   plugins:{legend:{display:false}},
-   scales:{
-    x:{ticks:{font:{size:9}}},
-    y:{title:{display:true,text:"PSU"}}
-   }
-  }
- });
-
- const sorted=[...data].sort((a,b)=>
-  new Date(a.date)-new Date(b.date)
- );
-
- // Limit chart rendering density for large 15-minute datasets.
- const step=Math.max(1,Math.ceil(sorted.length/2500));
- const display=sorted.filter((_,i)=>i%step===0);
-
- if(charts.salinity) charts.salinity.destroy();
-
- charts.salinity=new Chart($("salinityChart"),{
-  type:"line",
-  data:{
-   labels:display.map(d=>d.date.slice(0,16).replace("T"," ")),
-   datasets:[{
-    label:"Observed salinity",
-    data:display.map(d=>d.salinity_psu),
-    borderColor:"#287bb5",
-    backgroundColor:"#287bb5",
-    pointRadius:0,
-    borderWidth:1.4
-   }]
-  },
-  options:{
-   responsive:true,
-   maintainAspectRatio:false,
-   plugins:{legend:{labels:{font:{size:9}}}},
-   scales:{
-    x:{ticks:{maxTicksLimit:8,font:{size:8}}},
-    y:{title:{display:true,text:"Salinity (PSU)"}}
-   }
-  }
- });
+function normalizeStation(value) {
+  return String(value||"").trim().toLowerCase()
+    .replace(/\s+/g," ")
+    .replace(/[()]/g,"");
 }
 
+function parseDate(value) {
+  if(!value) return null;
+  const d=new Date(value);
+  if(!Number.isNaN(d.getTime())) return d;
+  const parts=String(value).split(/[/-]/);
+  if(parts.length===3) {
+    const [a,b,c]=parts;
+    if(a.length===4) return new Date(Number(a),Number(b)-1,Number(c));
+    if(c.length===4) return new Date(Number(c),Number(b)-1,Number(a));
+  }
+  return null;
+}
 
-// ============================================================
-// 14. ONLINE HYDROLOGY CHARTS
-// ============================================================
+function validateAndConvert(rows) {
+  if(!rows.length) throw new Error("The CSV contains no observation records.");
 
-function drawHydrologyCharts(){
- if(hydrologyData.length){
-  const grouped=new Map();
+  const first=rows[0];
+  const required=["date","station","salinity_psu"];
+  const missing=required.filter(k=>!(k in first));
+  if(missing.length) throw new Error("Missing required CSV field(s): "+missing.join(", "));
 
-  hydrologyData.forEach(d=>{
-   if(!grouped.has(d.date)) grouped.set(d.date,[]);
-   grouped.get(d.date).push(Number(d.discharge_m3s));
+  const converted=[];
+  rows.forEach((r,index)=>{
+    const date=parseDate(r.date);
+    const salinity=Number(r.salinity_psu);
+    if(!date || !r.station || r.salinity_psu==="" || !Number.isFinite(salinity)) return;
+
+    const item={
+      date:date.toISOString().slice(0,10),
+      station:String(r.station).trim(),
+      salinity_psu:salinity,
+      water_level_m:optionalNumber(r.water_level_m),
+      water_temp_c:optionalNumber(r.water_temp_c),
+      conductivity:optionalNumber(r.conductivity),
+      tds:optionalNumber(r.tds),
+      discharge_m3s:optionalNumber(r.discharge_m3s)
+    };
+    converted.push(item);
   });
 
-  const rows=[...grouped.entries()].sort((a,b)=>
-   a[0].localeCompare(b[0])
-  );
+  if(!converted.length) throw new Error("No valid rows found. Check date, station and salinity_psu values.");
+  return converted;
+}
 
-  const step=Math.max(1,Math.ceil(rows.length/2500));
-  const display=rows.filter((_,i)=>i%step===0);
+function optionalNumber(value) {
+  if(value===undefined || value===null || String(value).trim()==="") return null;
+  const n=Number(value);
+  return Number.isFinite(n)?n:null;
+}
 
-  if(charts.discharge) charts.discharge.destroy();
+function loadObservationText(text,sourceName) {
+  try {
+    const rows=parseCSV(text);
+    const converted=validateAndConvert(rows);
+    allData=converted.sort((a,b)=>a.date.localeCompare(b.date));
+    populateObservationStationFilter();
+    applyFilters();
+    document.getElementById("csvMessage").className="success";
+    document.getElementById("csvMessage").textContent=
+      `Loaded ${allData.length.toLocaleString()} valid salinity observations from ${sourceName}.`;
+    document.getElementById("observationStatus").textContent=allData.length.toLocaleString()+" records";
+  } catch(err) {
+    document.getElementById("csvMessage").className="warning";
+    document.getElementById("csvMessage").textContent=err.message;
+    console.error(err);
+  }
+}
 
-  charts.discharge=new Chart($("dischargeChart"),{
-   type:"line",
-   data:{
-    labels:display.map(x=>x[0]),
-    datasets:[{
-     label:"Mean modelled discharge",
-     data:display.map(x=>mean(x[1])),
-     borderColor:"#176b45",
-     backgroundColor:"#176b45",
-     pointRadius:0,
-     borderWidth:1.5
-    }]
-   },
-   options:{
+document.getElementById("csvFile").addEventListener("change",async e=>{
+  const file=e.target.files[0];
+  if(!file) return;
+  const text=await file.text();
+  loadObservationText(text,file.name);
+});
+
+document.getElementById("loadCsvBtn").onclick=async()=>{
+  const url=document.getElementById("csvUrl").value.trim();
+  if(!url) {
+    showCsvMessage("Enter a direct CSV URL first.","warning");
+    return;
+  }
+
+  showCsvMessage("Requesting online CSV data...","notice");
+  try {
+    const response=await fetch(url,{method:"GET"});
+    if(!response.ok) throw new Error("HTTP "+response.status+" — CSV could not be retrieved.");
+    const text=await response.text();
+
+    if(text.trim().startsWith("<")) {
+      throw new Error("The URL returned HTML rather than CSV. Enter a direct CSV download URL.");
+    }
+    loadObservationText(text,url);
+  } catch(err) {
+    showCsvMessage(
+      "Online CSV loading failed: "+err.message+
+      " This may be caused by CORS restrictions, an invalid URL or a server access restriction. Download the CSV and use the file upload instead.",
+      "warning"
+    );
+  }
+};
+
+function showCsvMessage(message,kind) {
+  const el=document.getElementById("csvMessage");
+  el.className=kind;
+  el.textContent=message;
+}
+
+document.getElementById("clearDataBtn").onclick=()=>{
+  allData=[];
+  filteredData=[];
+  document.getElementById("csvFile").value="";
+  document.getElementById("csvUrl").value="";
+  document.getElementById("observationStatus").textContent="No data loaded";
+  document.getElementById("csvMessage").className="notice";
+  document.getElementById("csvMessage").textContent="Salinity observations cleared.";
+  populateObservationStationFilter();
+  applyFilters();
+};
+
+/* ============================================================
+   5. FILTERS AND STATISTICS
+============================================================ */
+
+function getThreshold() {
+  const n=Number(document.getElementById("threshold").value);
+  return Number.isFinite(n)&&n>=0?n:0.5;
+}
+
+function populateObservationStationFilter() {
+  const select=document.getElementById("stationFilter");
+  const previous=select.value;
+  const names=[...new Set(allData.map(r=>r.station))].sort();
+  select.innerHTML='<option value="ALL">All stations</option>';
+  names.forEach(name=>{
+    const opt=document.createElement("option");
+    opt.value=name;opt.textContent=name;select.appendChild(opt);
+  });
+  if(names.includes(previous)) select.value=previous;
+}
+
+function applyFilters() {
+  const station=document.getElementById("stationFilter").value;
+  const start=document.getElementById("startDate").value;
+  const end=document.getElementById("endDate").value;
+
+  filteredData=allData.filter(r=>{
+    if(station!=="ALL" && r.station!==station) return false;
+    if(start && r.date<start) return false;
+    if(end && r.date>end) return false;
+    return true;
+  });
+  updateAnalytics();
+  refreshMap();
+}
+
+document.getElementById("applyFilterBtn").onclick=applyFilters;
+document.getElementById("resetFilterBtn").onclick=()=>{
+  document.getElementById("stationFilter").value="ALL";
+  document.getElementById("startDate").value="";
+  document.getElementById("endDate").value="";
+  document.getElementById("threshold").value="0.5";
+  applyFilters();
+};
+
+document.getElementById("threshold").addEventListener("change",()=>{
+  updateAnalytics();refreshMap();
+});
+
+function mean(values) {
+  return values.length?values.reduce((a,b)=>a+b,0)/values.length:null;
+}
+function fmt(value,digits=2) {
+  return value===null || !Number.isFinite(value)?"—":value.toFixed(digits);
+}
+function updateAnalytics() {
+  const values=filteredData.map(r=>r.salinity_psu);
+  const stations=[...new Set(filteredData.map(r=>r.station))];
+  const avg=mean(values);
+  const max=values.length?Math.max(...values):null;
+  const threshold=getThreshold();
+  const fresh=values.filter(v=>v<=threshold).length;
+  const latest=filteredData.length?filteredData[filteredData.length-1].date:"—";
+
+  document.getElementById("kpiRecords").textContent=filteredData.length.toLocaleString();
+  document.getElementById("kpiStations").textContent=stations.length;
+  document.getElementById("kpiMean").textContent=fmt(avg);
+  document.getElementById("kpiMax").textContent=fmt(max);
+  document.getElementById("kpiFresh").textContent=fresh.toLocaleString();
+  document.getElementById("kpiLatest").textContent=latest;
+
+  renderSummaryTable();
+  renderCharts();
+  renderSaltFront();
+}
+
+function renderSummaryTable() {
+  const tbody=document.getElementById("summaryTable");
+  tbody.innerHTML="";
+  if(!filteredData.length) {
+    tbody.innerHTML='<tr><td colspan="4">No observations loaded.</td></tr>';
+    return;
+  }
+
+  const names=[...new Set(filteredData.map(r=>r.station))].sort();
+  names.forEach(name=>{
+    const arr=filteredData.filter(r=>r.station===name);
+    const vals=arr.map(r=>r.salinity_psu);
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${escapeHTML(name)}</td><td>${arr.length}</td><td>${fmt(mean(vals))}</td><td>${fmt(Math.max(...vals))}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderCharts() {
+  const byDate={};
+  filteredData.forEach(r=>{
+    if(!byDate[r.date]) byDate[r.date]=[];
+    byDate[r.date].push(r.salinity_psu);
+  });
+
+  const dates=Object.keys(byDate).sort();
+  const daily=dates.map(d=>mean(byDate[d]));
+
+  const stationNames=[...new Set(filteredData.map(r=>r.station))].sort();
+  const stationMeans=stationNames.map(name=>mean(
+    filteredData.filter(r=>r.station===name).map(r=>r.salinity_psu)
+  ));
+
+  const byMonth={};
+  filteredData.forEach(r=>{
+    const month=r.date.slice(0,7);
+    if(!byMonth[month]) byMonth[month]=[];
+    byMonth[month].push(r.salinity_psu);
+  });
+  const months=Object.keys(byMonth).sort();
+  const monthly=months.map(m=>mean(byMonth[m]));
+
+  [timeChart,stationChart,monthlyChart].forEach(c=>{if(c)c.destroy();});
+
+  const commonOptions={
     responsive:true,
-    maintainAspectRatio:false,
-    plugins:{legend:{labels:{font:{size:9}}}},
+    maintainAspectRatio:true,
+    plugins:{legend:{display:false}},
     scales:{
-     x:{ticks:{maxTicksLimit:7,font:{size:8}}},
-     y:{title:{display:true,text:"Discharge (m³/s)"}}
+      x:{ticks:{font:{size:9},maxRotation:45},grid:{display:false}},
+      y:{ticks:{font:{size:9}},grid:{color:"#edf1f5"}}
     }
-   }
-  });
- }
-
- if(rainfallData.length){
-  const grouped=new Map();
-
-  rainfallData.forEach(d=>{
-   if(!grouped.has(d.date)) grouped.set(d.date,[]);
-   grouped.get(d.date).push(Number(d.precipitation_mm));
-  });
-
-  const rows=[...grouped.entries()].sort((a,b)=>
-   a[0].localeCompare(b[0])
-  );
-
-  const step=Math.max(1,Math.ceil(rows.length/2500));
-  const display=rows.filter((_,i)=>i%step===0);
-
-  if(charts.rain) charts.rain.destroy();
-
-  charts.rain=new Chart($("rainChart"),{
-   type:"bar",
-   data:{
-    labels:display.map(x=>x[0]),
-    datasets:[{
-     label:"Mean daily rainfall",
-     data:display.map(x=>mean(x[1])),
-     backgroundColor:"#69a8d4"
-    }]
-   },
-   options:{
-    responsive:true,
-    maintainAspectRatio:false,
-    plugins:{legend:{labels:{font:{size:9}}}},
-    scales:{
-     x:{ticks:{maxTicksLimit:7,font:{size:8}}},
-     y:{title:{display:true,text:"Rainfall (mm/day)"}}
-    }
-   }
-  });
- }
-}
-
-
-// ============================================================
-// 15. CLEAR CHARTS
-// ============================================================
-
-function clearSalinityCharts(){
- ["season","salinity"].forEach(key=>{
-  if(charts[key]){
-   charts[key].destroy();
-   charts[key]=null;
-  }
- });
-
- $("stationTable").innerHTML=
-  '<tr><td colspan="4">No observed salinity records loaded.</td></tr>';
-
- $("recordCount").textContent="0";
- $("maxSalinity").textContent="—";
- $("saltDistance").textContent="—";
-}
-
-
-// ============================================================
-// 16. EXPORTS
-// ============================================================
-
-$("exportSalinity").addEventListener("click",()=>{
- downloadCSV(
-  filteredSalinity(),
-  "Gambia_DWR_Salinity_Observations.csv"
- );
-});
-
-$("exportHydro").addEventListener("click",()=>{
- downloadCSV(
-  hydrologyData,
-  "Gambia_Modelled_River_Discharge.csv"
- );
-});
-
-$("exportSummary").addEventListener("click",()=>{
- const data=filteredSalinity();
-
- const rows=STATIONS.map(s=>{
-  const records=data.filter(d=>
-   d.station_code===s.code || d.station===s.name
-  );
-
-  return {
-   station:s.name,
-   station_code:s.code,
-   river_distance_km:s.distance,
-   observation_count:records.length,
-   mean_salinity_psu:mean(records.map(d=>d.salinity_psu)),
-   maximum_salinity_psu:max(records.map(d=>d.salinity_psu)),
-   minimum_salinity_psu:min(records.map(d=>d.salinity_psu))
   };
- });
 
- downloadCSV(rows,"Gambia_Salinity_Station_Summary.csv");
-});
+  timeChart=new Chart(document.getElementById("timeChart"),{
+    type:"line",
+    data:{labels:dates,datasets:[{
+      data:daily,borderColor:"#1769aa",backgroundColor:"rgba(23,105,170,.12)",
+      fill:true,tension:.25,pointRadius:2,borderWidth:2
+    }]},
+    options:{...commonOptions}
+  });
 
+  stationChart=new Chart(document.getElementById("stationChart"),{
+    type:"bar",
+    data:{labels:stationNames,datasets:[{
+      data:stationMeans,backgroundColor:"#16a6c9",borderRadius:4
+    }]},
+    options:{...commonOptions,indexAxis:"y"}
+  });
 
-// ============================================================
-// 17. RESET
-// ============================================================
+  monthlyChart=new Chart(document.getElementById("monthlyChart"),{
+    type:"bar",
+    data:{labels:months,datasets:[{
+      data:monthly,backgroundColor:"#16865b",borderRadius:4
+    }]},
+    options:{...commonOptions}
+  });
+}
 
-$("clearData").addEventListener("click",()=>{
- hydrologyData=[];
- rainfallData=[];
- salinityData=[];
+function renderSaltFront() {
+  const box=document.getElementById("saltFront");
+  if(!filteredData.length) {
+    box.textContent="Load salinity observations to calculate a station-based freshwater boundary indicator.";
+    return;
+  }
 
- clearSalinityCharts();
+  const threshold=getThreshold();
+  const latestDate=filteredData[filteredData.length-1].date;
+  const sameDate=filteredData.filter(r=>r.date===latestDate);
 
- if(charts.discharge) charts.discharge.destroy();
- if(charts.rain) charts.rain.destroy();
+  const mapped=sameDate.map(r=>{
+    const s=hydroStations.find(x=>normalizeStation(x.name)===normalizeStation(r.station));
+    return s?{...r,km:s.km}:null;
+  }).filter(x=>x && x.km!==null);
 
- setStatus("Data cleared.");
- setProgress(0,"Ready.");
- setMessage("All loaded observations and online series cleared.");
-});
+  if(!mapped.length) {
+    box.textContent="The latest observation date ("+latestDate+") has no matching stations with an indicative river-distance value. A salt-front distance cannot be estimated from the available records.";
+    return;
+  }
 
-$("reset").addEventListener("click",()=>{
- $("stationSelect").value="ALL";
- $("threshold").value="0.5";
- analyseSalinity();
- map.fitBounds(L.latLngBounds(riverCoords),{padding:[20,20]});
-});
+  const freshStations=mapped.filter(r=>r.salinity_psu<=threshold).sort((a,b)=>b.km-a.km);
+  const salineStations=mapped.filter(r=>r.salinity_psu>threshold).sort((a,b)=>b.km-a.km);
 
+  if(!freshStations.length || !salineStations.length) {
+    box.textContent="Insufficient same-date station observations on both sides of the selected threshold to bracket a freshwater/saline boundary. Latest date: "+latestDate+".";
+    return;
+  }
 
-// ============================================================
-// 18. STARTUP
-// ============================================================
+  const inlandFresh=freshStations[0];
+  const nearestSeawardSaline=salineStations
+    .filter(r=>r.km<inlandFresh.km)
+    .sort((a,b)=>b.km-a.km)[0];
 
-$("analysisTitle").textContent=
- "All monitoring stations • 2014–2020";
+  if(!nearestSeawardSaline) {
+    box.textContent="Freshwater and saline readings are available, but they do not bracket a boundary using the available station chainages. Latest date: "+latestDate+".";
+    return;
+  }
 
-$("stationCount").textContent=STATIONS.length;
+  box.innerHTML=
+    `<strong>Station-based boundary bracket: ${nearestSeawardSaline.km}–${inlandFresh.km} km from Banjul</strong><br>`+
+    `Latest common observation date: ${latestDate}<br>`+
+    `Seaward saline station: ${escapeHTML(nearestSeawardSaline.station)} (${nearestSeawardSaline.salinity_psu} PSU)<br>`+
+    `Inland freshwater station: ${escapeHTML(inlandFresh.station)} (${inlandFresh.salinity_psu} PSU)<br>`+
+    `Threshold: ${threshold} PSU. This is a station bracket, not a continuous interpolated salt-front position.`;
+}
 
-map.fitBounds(L.latLngBounds(riverCoords),{padding:[20,20]});
+/* ============================================================
+   6. DWR ONLINE DIRECTORY LOADER
+   Retrieve directory and individual station metadata.
+   CORS failure falls back to the built-in station list.
+============================================================ */
 
-setStatus(
- "Ready. Fetch online hydrological data or load observed DWR salinity records."
-);
+function parseDwrDirectory(html) {
+  const doc=new DOMParser().parseFromString(html,"text/html");
+  const links=[...doc.querySelectorAll('a[href*="/our-stations/"]')];
+  const found=[];
 
-console.log("GBoS GEOAI River Gambia Salinity Intelligence");
-console.log("Stations:",STATIONS);
-console.log("Online flood API:",API.flood);
-console.log("Online historical weather API:",API.weather);
+  links.forEach(a=>{
+    const href=a.getAttribute("href")||"";
+    const match=href.match(/\/our-stations\/(\d+)\/?/);
+    if(!match) return;
+    const id=Number(match[1]);
+    if(id<1 || id>100) return;
+
+    const name=(a.textContent||"").trim();
+    const existing=found.find(s=>s.id===id);
+    if(!existing) {
+      const fallback=dwrStations.find(s=>s.id===id);
+      found.push({
+        ...(fallback||{id}),
+        name:name && name.length>2 && !/view detail/i.test(name)?name:(fallback?.name||"Station "+id),
+        url:"/our-stations/"+id+"/"
+      });
+    }
+  });
+
+  return found;
+}
+
+function extractDetailFields(html,station) {
+  const doc=new DOMParser().parseFromString(html,"text/html");
+  const text=(doc.body?.innerText||doc.body?.textContent||"").replace(/\s+/g," ");
+
+  const getValue=(label)=>{
+    const escaped=label.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+    const re=new RegExp(escaped+"\\s*:?\\s*(.*?)(?=\\s+(?:Station Name|WIGOS ID|Elevation \\(m\\)|Station Type|Declared Status|Station information|ID)\\s*:|$)","i");
+    const m=text.match(re);
+    return m?m[1].trim():"";
+  };
+
+  const name=getValue("Station Name");
+  const wigos=getValue("WIGOS ID");
+  const elevation=getValue("Elevation (m)");
+  const type=getValue("Station Type");
+  const status=getValue("Declared Status");
+
+  if(name) station.name=name;
+  if(wigos) station.wigos=wigos;
+  if(type) station.type=type;
+  if(elevation && elevation!=="—" && Number.isFinite(Number(elevation))) station.elevation=Number(elevation);
+  if(status) station.status=status;
+  station.detailRetrieved=true;
+  return station;
+}
+
+async function loadDwrStationsOnline() {
+  const message=document.getElementById("dwrMessage");
+  message.className="notice";
+  message.textContent="Connecting to the official DWR station directory...";
+
+  try {
+    const response=await fetch(DWR_DIRECTORY_URL,{mode:"cors",cache:"no-cache"});
+    if(!response.ok) throw new Error("Directory returned HTTP "+response.status);
+
+    const html=await response.text();
+    const online=parseDwrDirectory(html);
+    if(!online.length) throw new Error("Could not identify station records in the directory response.");
+
+    const merged=online.map(s=>{
+      const fallback=dwrStations.find(x=>x.id===s.id)||{};
+      return {...fallback,...s};
+    });
+
+    dwrStations.splice(0,dwrStations.length,...merged);
+    dwrOnlineLoaded=true;
+    renderDwrDirectory();
+
+    message.className="success";
+    message.textContent=`Retrieved ${merged.length} station entries from the official DWR directory. Loading individual station details...`;
+
+    let detailSuccess=0;
+    for(const station of dwrStations) {
+      try {
+        const detailResponse=await fetch(DWR_BASE+station.url,{mode:"cors",cache:"no-cache"});
+        if(!detailResponse.ok) continue;
+        extractDetailFields(await detailResponse.text(),station);
+        detailSuccess++;
+      } catch(detailError) {
+        console.warn("Could not retrieve station detail:",station.name,detailError);
+      }
+    }
+
+    renderDwrDirectory();
+    updateDwrCounts();
+
+    message.className="success";
+    message.textContent=
+      `Online directory retrieved: ${dwrStations.length} stations. `+
+      `${detailSuccess} individual station detail page(s) were refreshed successfully.`;
+    document.getElementById("directoryStatus").textContent="Online directory loaded";
+    document.getElementById("lastRefresh").textContent=new Date().toLocaleString();
+
+  } catch(err) {
+    console.warn("DWR online directory retrieval failed:",err);
+    dwrOnlineLoaded=false;
+    renderDwrDirectory();
+    updateDwrCounts();
+
+    message.className="warning";
+    message.textContent=
+      "The browser could not retrieve the DWR website directly. This is commonly caused by CORS restrictions. "+
+      "The dashboard is displaying the supplied 12-station directory as a fallback. "+
+      "Official detail links remain available. Error: "+err.message;
+
+    document.getElementById("directoryStatus").textContent="Fallback directory";
+    document.getElementById("lastRefresh").textContent="Online refresh blocked";
+  }
+}
+
+document.getElementById("refreshDwr").onclick=loadDwrStationsOnline;
+
+/* ============================================================
+   7. DWR DIRECTORY DISPLAY
+============================================================ */
+
+function statusClass(status) {
+  const s=String(status||"").toLowerCase();
+  if(s.includes("closed")) return "closed";
+  if(s.includes("operational") && !s.includes("partly")) return "operational";
+  return "unknown";
+}
+
+function renderDwrDirectory() {
+  const tbody=document.getElementById("dwrTable");
+  const search=(document.getElementById("dwrSearch").value||"").toLowerCase();
+  tbody.innerHTML="";
+
+  const list=dwrStations.filter(s=>
+    (s.name||"").toLowerCase().includes(search) ||
+    (s.wigos||"").toLowerCase().includes(search)
+  );
+
+  if(!list.length) {
+    tbody.innerHTML='<tr><td colspan="6">No matching stations.</td></tr>';
+    return;
+  }
+
+  list.forEach(s=>{
+    const status=s.status||"Not retrieved";
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td><strong>${escapeHTML(s.name||"Station "+s.id)}</strong></td>
+      <td>${escapeHTML(s.wigos||"—")}</td>
+      <td>${escapeHTML(s.type||"Not retrieved")}</td>
+      <td>${s.elevation===undefined?"—":escapeHTML(String(s.elevation))}</td>
+      <td><span class="pill ${statusClass(status)}">${escapeHTML(status)}</span></td>
+      <td><a class="station-link" href="${DWR_BASE+s.url}" target="_blank" rel="noopener">View official record ↗</a></td>`;
+    tbody.appendChild(tr);
+  });
+  updateDwrCounts();
+}
+
+function updateDwrCounts() {
+  document.getElementById("dwrTotal").textContent=dwrStations.length;
+  document.getElementById("dwrOperational").textContent=dwrStations.filter(s=>
+    String(s.status||"").toLowerCase()==="operational"
+  ).length;
+  document.getElementById("dwrPartial").textContent=dwrStations.filter(s=>
+    String(s.status||"").toLowerCase().includes("partly")
+  ).length;
+  document.getElementById("dwrClosed").textContent=dwrStations.filter(s=>
+    String(s.status||"").toLowerCase()==="closed"
+  ).length;
+}
+
+document.getElementById("dwrSearch").addEventListener("input",renderDwrDirectory);
+document.getElementById("showAllDwr").onclick=()=>{
+  document.getElementById("dwrSearch").value="";
+  renderDwrDirectory();
+};
+
+function renderHydroTable() {
+  const tbody=document.getElementById("hydroTable");
+  tbody.innerHTML="";
+  hydroStations.forEach(s=>{
+    const hasData=allData.some(r=>normalizeStation(r.station)===normalizeStation(s.name));
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td><strong>${escapeHTML(s.name)}</strong></td>
+      <td>${s.km===null?"Not specified":s.km+" km"}</td>
+      <td>${escapeHTML(s.coord)}</td>
+      <td>${hasData?'<span class="pill operational">Records loaded</span>':'<span class="pill unknown">No records</span>'}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ============================================================
+   8. EXPORTS
+============================================================ */
+
+function downloadText(filename,text,mime="text/csv;charset=utf-8;") {
+  const blob=new Blob([text],{type:mime});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function csvEscape(value) {
+  const s=value===null || value===undefined?"":String(value);
+  return '"'+s.replace(/"/g,'""')+'"';
+}
+
+function rowsToCSV(rows,headers) {
+  return [
+    headers.map(csvEscape).join(","),
+    ...rows.map(r=>headers.map(h=>csvEscape(r[h])).join(","))
+  ].join("\n");
+}
+
+document.getElementById("downloadFiltered").onclick=()=>{
+  if(!filteredData.length) {
+    alert("No filtered salinity observations to export.");
+    return;
+  }
+  const headers=["date","station","salinity_psu","water_level_m","water_temp_c","conductivity","tds","discharge_m3s"];
+  downloadText("Gambia_Salinity_Filtered_Observations.csv",rowsToCSV(filteredData,headers));
+};
+
+document.getElementById("downloadStations").onclick=()=>{
+  const rows=dwrStations.map(s=>({
+    station_id:s.id,
+    station_name:s.name,
+    wigos_id:s.wigos,
+    station_type:s.type||"",
+    elevation_m:s.elevation??"",
+    declared_status:s.status||"",
+    detail_url:DWR_BASE+s.url,
+    detail_retrieved:s.detailRetrieved?"Yes":"No"
+  }));
+  const headers=["station_id","station_name","wigos_id","station_type","elevation_m","declared_status","detail_url","detail_retrieved"];
+  downloadText("DWR_Gambia_Station_Directory.csv",rowsToCSV(rows,headers));
+};
+
+document.getElementById("downloadSummary").onclick=()=>{
+  const names=[...new Set(filteredData.map(r=>r.station))];
+  const rows=names.map(name=>{
+    const arr=filteredData.filter(r=>r.station===name);
+    const vals=arr.map(r=>r.salinity_psu);
+    return {
+      station:name,
+      record_count:arr.length,
+      mean_salinity_psu:fmt(mean(vals)),
+      maximum_salinity_psu:fmt(Math.max(...vals)),
+      minimum_salinity_psu:fmt(Math.min(...vals)),
+      latest_date:arr.map(r=>r.date).sort().at(-1)
+    };
+  });
+  if(!rows.length) {
+    alert("No station summary is available.");
+    return;
+  }
+  downloadText("Gambia_Salinity_Station_Summary.csv",
+    rowsToCSV(rows,["station","record_count","mean_salinity_psu","maximum_salinity_psu","minimum_salinity_psu","latest_date"]));
+};
+
+/* ============================================================
+   9. UTILITIES AND STARTUP
+============================================================ */
+
+function escapeHTML(value) {
+  return String(value??"").replace(/[&<>"']/g,char=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  })[char]);
+}
+
+function initialise() {
+  renderDwrDirectory();
+  renderHydroTable();
+  updateDwrCounts();
+  drawHydroMarkers();
+  drawRiver();
+  updateAnalytics();
+  document.getElementById("directoryStatus").textContent="Fallback directory ready";
+}
+
+initialise();
+
+/* Attempt automatic online retrieval on startup.
+   The fallback directory remains available if CORS blocks the request. */
+setTimeout(()=>loadDwrStationsOnline(),900);
 
 </script>
-
-<!-- Chart.js category-based time series; no date adapter required. -->
 </body>
 </html>
